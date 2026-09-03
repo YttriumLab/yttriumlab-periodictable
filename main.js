@@ -263,7 +263,7 @@
 			yl.info.ShowInfo.call($this, e);
 		});
 		
-		(function()
+		yl.LoadHash = function()
 		{
 			if (global.location.hash === '')
 			{
@@ -327,7 +327,9 @@
 				);
 				return;
 			}
-		})();
+		};
+		
+		yl.LoadHash();
 		
 		//-----------------------------------------------------------
 		//---- EVENT LISTENERS --------------------------------------
@@ -402,6 +404,8 @@
 				yl.search.Close();
 			}
 		});
+		
+		yl.$elms.global.on('hashchange', yl.LoadHash);
 		
 		//-----------------------------------------------------------
 		//---- INIT -------------------------------------------------
