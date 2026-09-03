@@ -316,9 +316,9 @@
 				console.log([
 					'the element could not be read from the url hash (' + hash + ')',
 					'the following can be used in the hash:',
-					'\t\u{2022} atomic number (e.g. #39)',
-					'\t\u{2022} element symbol (e.g. #y)',
-					'\t\u{2022} element name (e.g. #yttrium)'
+					'\t• atomic number (e.g. #39)',
+					'\t• element symbol (e.g. #y)',
+					'\t• element name (e.g. #yttrium)'
 				].join('\n'));
 				$('.periodicTable_cell[data-element="39"]').click();
 				console.log(
