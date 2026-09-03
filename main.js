@@ -209,15 +209,16 @@
 				return;
 			}
 			
-			yl.periodicTable.PERIODIC_TABLE_ELEMENTS.forEach(function(e)
+			for (var i = 0; i < yl.periodicTable.PERIODIC_TABLE_ELEMENTS.length; ++i)
 			{
-				if (e.name.toLowerCase() === hash || e.symbol.toLowerCase() === hash)
+				var me = yl.periodicTable.PERIODIC_TABLE_ELEMENTS[i];
+				if (me.name.toLowerCase() === hash || me.symbol.toLowerCase() === hash)
 				{
-					$('.periodicTable_cell[data-element="' + e.number + '"]').click();
-					console.log('loaded element info from hash: ' + e.name.toLowerCase());
+					$('.periodicTable_cell[data-element="' + me.number + '"]').click();
+					console.log('loaded element info from hash: ' + me.name.toLowerCase());
 					return;
 				}
-			});
+			}
 			
 			if (hash === 'lanthanoid')
 			{
@@ -229,6 +230,23 @@
 			{
 				$('.periodicTable_cell[data-element="89"]').click();
 				console.log('loaded element info from hash: ' + hash);
+				return;
+			}
+			
+			else
+			{
+				console.log([
+					'the element could not be read from the url hash (' + hash + ')',
+					'the following can be used in the hash:',
+					'\t\u{2022} atomic number (e.g. #39)',
+					'\t\u{2022} element symbol (e.g. #y)',
+					'\t\u{2022} element name (e.g. #yttrium)'
+				].join('\n'));
+				$('.periodicTable_cell[data-element="39"]').click();
+				console.log(
+					'loaded default element info: ' +
+					yl.periodicTable.PERIODIC_TABLE_ELEMENTS[38].name.toLowerCase()
+				);
 				return;
 			}
 		})();
@@ -267,7 +285,7 @@
 				x = pos[0];
 				y = pos[1] - 1;
 				element = $('.periodicTable_cell[data-element][data-pos="' + x + ',' + y + '"]');
-				if (!element.length && pos[0] === '3' && pos[1] === '9') // lanthanum
+				if (!element.length && pos[0] === '3' && pos[1] === '9') // lanthanum to yttrium
 					$('.periodicTable_cell[data-element="39"]').click();
 				element.click();
 			}
