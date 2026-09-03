@@ -122,6 +122,84 @@
 		yl.$elms.cells = $('.periodicTable_cell');
 		
 		//-----------------------------------------------------------
+		//---- SEARCH BOX -------------------------------------------
+		//-----------------------------------------------------------
+		
+		yl.search = {};
+		
+		yl.search.Draw = function()
+		{
+			var str = '';
+			str += '<div id="searchBox">';
+			str += '<input id="searchBoxInput" type="text" placeholder="search element ..." />';
+			str += '</div>';
+			yl.$elms.wrapper.append(str);
+		};
+		
+		yl.search.Draw();
+		
+		yl.$elms.searchBox = $('#searchBox');
+		yl.$elms.searchBoxInput = $('#searchBoxInput');
+		yl.$elms.searchBox.hide();
+		
+		yl.search.FindElement = function(query)
+		{
+			if (!query) return null;
+			query = String(query).trim().toLowerCase();
+			if (!query) return null;
+			
+			var num = Number(query);
+			if (!isNaN(num))
+			{
+				var byNumber = yl.periodicTable.PERIODIC_TABLE_ELEMENTS[num - 1];
+				if (byNumber) return byNumber;
+			}
+			
+			var element;
+			
+			for (var i = 0; i < yl.periodicTable.PERIODIC_TABLE_ELEMENTS.length; ++i)
+			{
+				element = yl.periodicTable.PERIODIC_TABLE_ELEMENTS[i];
+				if (element.name.toLowerCase() === query) return element;
+				if (element.symbol.toLowerCase() === query) return element;
+			}
+			for (var j = 0; j < yl.periodicTable.PERIODIC_TABLE_ELEMENTS.length; ++j)
+			{
+				element = yl.periodicTable.PERIODIC_TABLE_ELEMENTS[j];
+				if (element.name.toLowerCase().indexOf(query) !== -1) return element;
+				if (element.symbol.toLowerCase().indexOf(query) !== -1) return element;
+			}
+			
+			return null;
+		};
+		
+		yl.search.Open = function()
+		{
+			if (yl.$elms.searchBoxInput.is(':visible'))
+			{
+				yl.$elms.searchBoxInput.focus();
+				return;
+			}
+			
+			yl.$elms.searchBox.show();
+			yl.$elms.searchBoxInput.val('').focus();
+		};
+		yl.search.Close = function()
+		{
+			yl.$elms.searchBox.hide();
+			yl.$elms.searchBoxInput.val('');
+		};
+		
+		yl.search.Submit = function()
+		{	
+			var query = yl.$elms.searchBoxInput.val();
+			var element = yl.search.FindElement(query);
+			if (!element) return;
+			
+			$('.periodicTable_cell[data-element="' + element.number + '"]').click();
+		};
+		
+		//-----------------------------------------------------------
 		//---- SHOW INFO --------------------------------------------
 		//-----------------------------------------------------------
 		
@@ -259,7 +337,14 @@
 		{
 			var element;
 			var x, y, pos;
-			if ((e.keyCode === 9 && e.shiftKey) || e.keyCode === 37)
+			
+			if (e.keyCode === 70)
+			{
+				e.preventDefault();
+				yl.search.Open();
+			}
+			
+			else if ((e.keyCode === 9 && e.shiftKey) || e.keyCode === 37)
 			{
 				// tab-shift or left
 				e.preventDefault();
@@ -299,6 +384,22 @@
 				element = $('.periodicTable_cell[data-element][data-pos="' + x + ',' + y + '"]');
 				if (!element.length) return;
 				element.click();
+			}
+		});
+		
+		yl.$elms.searchBoxInput.on('keydown', function(e)
+		{
+			if (e.keyCode === 13)
+			{
+				// enter
+				e.preventDefault();
+				yl.search.Submit();
+			}
+			else if (e.keyCode === 27)
+			{
+				// escape
+				e.preventDefault();
+				yl.search.Close();
 			}
 		});
 		
