@@ -263,9 +263,24 @@
 			yl.info.ShowInfo.call($this, e);
 		});
 		
-		yl.LoadHash = function()
+		
+		//-----------------------------------------------------------
+		//---- READ HASH --------------------------------------------
+		//-----------------------------------------------------------
+		
+		yl.hash = {};
+		
+		yl.hash.GetHash = function(url)
 		{
-			if (global.location.hash === '')
+			var m = String(url).match(/#(.*)$/);
+			return m ? m[1] : '';
+		};
+		
+		yl.hash.LoadHash = function()
+		{
+			var hash = yl.hash.GetHash(global.location.href);
+			
+			if (hash === '')
 			{
 				$('.periodicTable_cell[data-element="39"]').click();
 				console.log(
@@ -275,7 +290,6 @@
 				return;
 			}
 			
-			var hash = global.location.hash.replace(/#/g, '').toLowerCase();
 			var num = Number(hash);
 			if (!isNaN(num) && (1 <= num && num <= yl.periodicTable.ELEMENTS_NUMBER))
 			{
@@ -329,7 +343,7 @@
 			}
 		};
 		
-		yl.LoadHash();
+		yl.hash.LoadHash();
 		
 		//-----------------------------------------------------------
 		//---- EVENT LISTENERS --------------------------------------
@@ -405,7 +419,7 @@
 			}
 		});
 		
-		yl.$elms.global.on('hashchange', yl.LoadHash);
+		yl.$elms.global.on('hashchange', yl.hash.LoadHash);
 		
 		//-----------------------------------------------------------
 		//---- INIT -------------------------------------------------
