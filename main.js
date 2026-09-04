@@ -1,5 +1,3 @@
-// note: FileSaver.js is not in use
-
 (function(global, $)
 {
 	'use strict';
